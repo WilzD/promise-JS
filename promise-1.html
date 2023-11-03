@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <h1>learning JS promise</h1>
+</body>
+<script>
+    //promise syntax
+    // let promise=new Promise(function(resolve,reject){
+    //     //do somthing
+    // })
+
+    // here we are making an dumy idea about how data through API took time to execute on screen
+    // suppose  getPosts() took 1 sec to execute
+    // and creating posts took 2 sec in that case the newly added post will not be seen on scren bcoz
+    // getpost show the data on screeen after 1 sec
+    //this is called as async behaviour, here getpost will be execute only after create post
+    // so getpost depends on create post to maikng that async behaviour working 
+    // we need promise ...  
+
+    // taking an array of objects 
+    // let posts = [
+    //     { title: 'Post one', body: 'this is post one' },
+    //     { title: 'Post two', body: 'this is post two' },
+    //     { title: 'Post three', body: 'this is post three' }
+    // ]
+    // //creating a funtion which show the posts after 1 sec
+    // function getPosts() {
+    //     setTimeout(() => {
+    //         let output = ''
+    //         posts.forEach((post, index) => {
+    //             output += `<li>${post.title}</li>`
+    //         });
+    //         document.body.innerHTML = output
+    //     }, 1000)
+    // }
+
+    //creating function which create an post after 2 sec
+    // function createPost(post){
+    //    setTimeout(()=>{
+    //     posts.push(post)
+    //    },2000)
+    // }
+
+    // making the above function using promise
+    // function createPost(post){
+    //     return new Promise((resolve,reject)=>{
+    //         setTimeout(()=>{
+    //             posts.push(post)
+
+    //             const error=false
+    //             //if no error then we invoke resolve our promise else we reject our promise
+    //             if(!error){
+    //                 resolve()
+    //             }
+    //             else{
+    //                 reject('Error:somthing went wrong in creating the post')
+    //             }
+    //         },2000)
+    //     })
+    // }
+
+    // createPost({title:'post four',body:"this is post four"}).then(getPosts)
+
+
+    //     console.log('start')
+
+    //    const promise1=new Promise((resolve,reject)=>{
+    //    console.log(1)
+    //    })
+
+    //    promise1.then(res=>console.log(2))
+    //    console.log('end')
+
+    // console.log('start')
+
+    // const fn=()=>(new Promise((resolve,reject)=>{
+    //     console.log(1)
+    //     resolve('success')
+    // }))
+
+    // console.log('middle')
+
+    // fn().then(res=>console.log(res))
+
+    // console.log('end')
+
+    // console.log('start')
+
+    // Promise.resolve(1).then((res)=>console.log(res))
+
+    // Promise.resolve(2).then((res)=>console.log(res))
+
+    // console.log('end')
+
+    //promise.all method
+    const allpost = []
+
+    // function createPost(post) {
+    //     setTimeout(() => {
+    //         allpost.push(post)
+    //     }, 2000)
+    // }
+
+    function updateLastUserActivityTime() {
+        return new Promise((resolve, reject) => {
+            setTimeout(() => {
+                if (allpost.length > 0) {
+                    let lastTime = allpost[allpost.length - 1]
+                    resolve(lastTime)
+                }
+                else {
+                    reject('Error : No last activity found')
+                }
+            }, 1000)
+        })
+    }
+
+   function allposts(){
+    setTimeout(()=>{
+        let postLi=''
+        allpost.forEach((post)=>{
+            postLi+=`<li>${post.title}'->'${post.time}</li>`
+        })
+        document.body.innerHTML=postLi
+    },2000)
+   }
+ 
+  function deletePost(){
+    return new Promise((resolve,reject)=>{
+        setTimeout(()=>{
+            if(allpost.length>0){
+                allpost.pop()
+                resolve()
+            }
+            else{
+               reject('Error : no post to delete')
+            }
+       },2000)
+    })
+  }
+  function create4thPost() {
+    return new Promise( (resolve, reject) => {
+        setTimeout( () => {
+            allpost.push({title: 'post Four',time:new Date().getTime()});
+            resolve();
+        }, 2000)
+    }) 
+}
+
+function create3rdPost() {
+    return new Promise( (resolve, reject) => {
+        setTimeout( () => {
+            allpost.push({title: 'post Three',time:new Date().getTime()});
+            resolve()
+        }, 3000)
+    }) 
+}
+function create5thPost() {
+    return new Promise( (resolve, reject) => {
+        setTimeout( () => {
+            allpost.push({title: 'post five',time:new Date().getTime()});
+            resolve()
+        }, 3000)
+    }) 
+}
+
+create3rdPost().then(create4thPost).then(create5thPost).then(allposts).then(deletePost).then(allposts).then(updateLastUserActivityTime).then(msg=>console.log(msg.time))
+
+
+</script>
+
+</html>
