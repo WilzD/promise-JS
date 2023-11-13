@@ -1,0 +1,116 @@
+//writing promise  with .then
+
+// console.log('person1: shows ticket');
+// console.log('person2: shows ticket');
+
+// //person3 's wife is brinkging the ticks
+// const promiseWifeBringgingTicket=new Promise((resolve,reject)=>{
+//     setTimeout(()=>{
+//       resolve('ticket') //here msg passed  is ticket
+//     },3000)
+// })
+// //now wife needs some popcorn on way to return ticks
+// const getPopcorn=promiseWifeBringgingTicket.then((msg)=>{  //msg recived as ticket
+//   console.log('husband : we should go in');
+//   console.log('wife : no i am hungry');
+//   return new Promise((resolve,reject)=>{
+//     resolve(`${msg} popcorn`) //here msg updated to ticket popcorn
+//   });
+// })
+// //now wife needs butter on popcorn
+// const getButterOnpopcorn=getPopcorn.then((msg)=>{ //here msg received as ticket popcorn
+//   console.log('husband : we should go in');
+//   console.log('wife : no i need butter on my pocorn');
+//   return new Promise((resolve,reject)=>{
+//     resolve(`${msg} butter`)  //here msg updated to ticket popcorn butter
+//   })
+// })
+// getButterOnpopcorn.then(msg=>console.log(msg))
+// //here they bought ticket popcorn and butter all
+
+// console.log('person4: shows ticket');
+// console.log('person5: shows ticket');
+
+
+
+// now we are using async await to do the same
+//we are creating a async function to do the all premovie stufs..
+
+
+// console.log('person1: shows ticket');
+// console.log('person2: shows ticket');
+
+// //async function always return a promise
+// const preMovie = async () => {
+//   const promiseWifeBringgingTicket = new Promise((resolve, reject) => {
+//     setTimeout(() => resolve('ticket'), 3000)
+//   })
+
+//   const getPopcorn = new Promise((resolve, reject) => resolve('popcorn'))
+//   const getButterOnpopcorn=new Promise((resolve,reject)=>resolve('butter'))
+//   const getColddrink=new Promise((resolve,reject)=>resolve('Cold Drink'))
+
+//   let ticket = await promiseWifeBringgingTicket
+
+//   console.log(`wife : i got  ${ticket}`);
+//   console.log('husband : we should go in');
+//   console.log('wife : no i am hungry');
+
+//   let popcorn = await getPopcorn
+//   console.log(`husband : i got some ${popcorn}`);
+//   console.log('husband : we should go in');
+//   console.log('wife : no i need butter on my pocorn');
+
+//   let butter=await getButterOnpopcorn
+//   console.log(`husband : we got some ${butter} on ${popcorn}`);
+//   console.log('husband : we should go in');
+//   console.log('wife : no i need cold drink also');
+
+//   let coldDrink = await getColddrink
+//   console.log(`husband : here is your  ${coldDrink}`);
+//   console.log('husband : we should go in');
+//   console.log('wife : lets goo..');
+ 
+//   return ticket
+
+// }
+// preMovie().then(msg=>console.log(`person3: shows ${msg}`))
+
+// console.log('person4: shows ticket');
+// console.log('person5: shows ticket');
+
+//if the promises not depends on each other then we can use promise.all
+//suppose husband brings coke and popcorn ,while wife taking ticket,then we can do this..
+console.log('person1: shows ticket');
+console.log('person2: shows ticket');
+
+//async function always return a promise
+const preMovie = async () => {
+  const promiseWifeBringgingTicket = new Promise((resolve, reject) => {
+    setTimeout(() => resolve('ticket'), 3000)
+  })
+
+  const getPopcorn = new Promise((resolve, reject) => resolve('popcorn'))
+  const getButterOnpopcorn=new Promise((resolve,reject)=>resolve('butter'))
+  const getColddrink=new Promise((resolve,reject)=>resolve('Cold Drink'))
+
+  //error handeling, using try and catch ,what if ticket is not available so  in promiseWifeBringgingTicket we said reject('sad face')
+  let ticket 
+  try{
+    ticket = await promiseWifeBringgingTicket
+  }
+  catch(error){
+    ticket=('umm!! : tickets are not awailable')
+  }
+
+  let [popcorn,butter,coldDrink]= await Promise.all([getPopcorn,getButterOnpopcorn,getColddrink])
+
+  console.log(` husband: here is your ${popcorn} ${butter} and ${coldDrink}`)
+  console.log((`wife : ${ticket}`))
+  return ticket
+}
+preMovie().then(msg=>console.log(`person3: shows ${msg}`))
+
+console.log('person4: shows ticket');
+console.log('person5: shows ticket');
+
